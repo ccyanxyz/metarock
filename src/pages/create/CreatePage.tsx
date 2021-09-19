@@ -232,7 +232,24 @@ export const CreatePage: React.FC = () => {
           "type": "function"
         }
     ];
-    web3.eth.Contract.setProvider('https://testnet.aurora.dev')
+    const ethEnabled = async () => {
+      if (typeof window.ethereum !== 'undefined') {
+        // Instance web3 with the provided information from the MetaMask provider information
+        web3 = new Web3(window.ethereum);
+        try {
+            // Request account access
+            await window.ethereum.enable();
+            return true
+        } catch (e) {
+            // User denied access
+            return false
+        }
+      }
+      return false;
+    }
+    console.log(ethEnabled);
+    
+    //web3.eth.Contract.setProvider('https://testnet.aurora.dev')
 
     var contractAddr = "0xBBcD24Ec8e6f7FD230dCB1b93e95d7696F5Cef6C";
     var myContract = new web3.eth.Contract(abi, contractAddr); //合约实例
